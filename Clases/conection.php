@@ -29,7 +29,6 @@ class conection
             try{
                 /*Se crea una conexión*/
                 $this->conection_bd = new PDO($dsn,$this->getUser(),$this->getPassword());
-
                 if($this->conection_bd){
                     /*La conexión fue correcta*/
                     return $this->conection_bd;
