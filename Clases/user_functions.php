@@ -10,11 +10,13 @@ include_once("conection.php");
 class user_functions
 {
     private $con=null;
+    private $date;
 
  public function __construct()
  {
      $this->con = new conection();
      date_default_timezone_set("America/merida");
+     $date = date("Y-m-d");
 
 
  }
@@ -36,20 +38,86 @@ class user_functions
 
  }
 
- public function verificar_entrada($user){
-     $obtener_conexion = $this->con->conectar();
+ public function verificar_entrada_salida($user){
+     $conection = $this->con->conectar();
      $date = date('Y-m-d');
 
-     $query = "select * from check_t where num_empleado=".$user." and fecha_jornada='".$date."'::date";
+    /*Verificar según la hora de entrada*/
+     $dia_semana = (int) date("w");
+     //1.1sumar uno para coincidir con la BD
+     $dia_semana++;
 
-     $prepare = $obtener_conexion->prepare($query);
+     //2.verificar si esta dentro del horario de entrada del usuario la hora
+     $hora_actual = new DateTime();
+     //$hora_actual = new DateTime("6:20:10");
+     //$hora_actual = new DateTime("8:31:11");
+     //$hora_actual = new DateTime("20:20:10");
+
+     //2.1 Obtener horario del empleado
+     $dia_semana=5;
+     /*Fin de semana*/
+     if($dia_semana == 7 || $dia_semana == 1){
+         //Esta fuera de lo permitido enviar a revisión, enviar mensaje de problema
+         return array("mensaje"=>"No es posible realizar el registro, fuera de dias de trabajo.","estado"=>1);
+     }
+
+     $prepare = $conection->prepare("select * from horario where num_empleado=".$user." and num_dia=".$dia_semana);
+     $prepare->execute();
+
+     //Se obtiene la entrada y salida para ese día
+     $obj_horario = $prepare->fetchObject();
+     $hora_permitida = new DateTime($obj_horario->entrada);
+     /*Se verifica que este dentro del rango de hora permitida*/
+     $res_rango = $this->verificar_rango_horas($hora_permitida,$hora_actual);
+     $salida=false;
+     if(!$res_rango){
+         /*Verificar si es una salida*/
+         $hora_permitida= new DateTime($obj_horario->salida);
+         $res_salida_rango = $this->verificar_rango_horas($hora_permitida,$hora_actual);
+         /*No es salida*/
+         if(!$res_salida_rango){
+             return array("mensaje"=>"No es posible realizar una entrada o salida ya que no esta fuera del horario permitido.","estado"=>2);
+         }else{
+             $salida=true;
+         }
+
+     }
+
+     $query = "select * from check_t where num_empleado=".$user." and fecha_jornada='".$date."'::date";
+     //$query = "select * from check_t where num_empleado=".$user." and fecha_jornada='2019-05-12'::date";
+     $prepare = $conection->prepare($query);
      //Ejecuto query
      $prepare->execute();
      //obtengo la respuesta como objeto
-     return $prepare->fetchObject();
+     $obj =$prepare->fetchObject();
+     $band = is_object($obj);
 
+     if($band){
+         return array("registro"=>$obj,"estado"=>4);
+     }else{
+         return array("mensaje"=>"No hay registro.","estado"=> $salida==true ? 4:3);
+     }
 
  }
+
+ function verificar_rango_horas($hora_permitida,$hora_actual){
+     /*Rango de horas permitidas*/
+     $hora_permitida->modify("+1 hour");
+     $h_final = new DateTime((string)$hora_permitida->format("H:i:s"));
+     $hora_permitida->modify("-2 hour");
+     $h_ini =new DateTime((string)$hora_permitida->format("H:i:s"));
+
+     return $this->hora_dentro_rango_horas($h_ini,$h_final,$hora_actual);
+ }
+
+ function hora_dentro_rango_horas($dateEntrada_menos, $dateEntrada_mas, $dateEntrada) {
+        return $dateEntrada_menos <= $dateEntrada && $dateEntrada <= $dateEntrada_mas;
+ }
+
+
+
+
+
 
  public function realizar_operacion_entrada_salida($user,$pwd){
     $verificacion = $this->verificar_empleado($user,$pwd);
@@ -58,62 +126,87 @@ class user_functions
         return array("mensaje"=>"La contraseña o el usuario son incorrectos","estado"=>false);
     }else{
         //Verificar si es entrada
-        $response = $this->verificar_entrada($user);
-        //Insertar entrada
-        if($response == false){
+        $response = $this->verificar_entrada_salida($user);
+        //verificar estados para la entrada
+        switch ($response['estado']){
+            case 1: /*Esta en fin de semana*/return $response; break;
+            case 2: /*Esta fuera del rango de horas*/return $response; break;
+            case 3: /*No hay registro de entrada*/
+                return $this->insertar_entrada_salida($user,0);
+                break;
+            case 4: /*Es una salida*/
 
-            $response = $this->insertar_entrada($user);
-            return $response;
+                /*Existe el objeto para salida*/
+                if(isset($response['registro'])){
+                    if(!$response['registro']->entrada_salida){
+                        return $this->actualizar_to_salida($user);
+                    }else{
+                        return array("mensaje"=>"Ya hay un registro de salida, no es posible cambiarlo","estado"=>false);
+                    }
+                }else{
+                    return $this->insertar_entrada_salida($user,1);
+                }
 
-        }else{
-            $response = $this->actualizar_to_salida($user);
+                break;
         }
-
-
-
-
     }
 
  }
 
-    public  function insertar_entrada($user)
+    public  function insertar_entrada_salida($user,$e_s)
     {
-        //1.obtener el día de la semana
-        $dia_semana = (int) date("w");
-        //1.1sumar uno para coincidir con la BD
-        $dia_semana++;
-        print $dia_semana."<br>";
-        //2.verificar si esta dentro del horario de entrada del usuario la hora
+        $conection=$this->con->conectar();
+        /*Realizar guardado*/
+        $prepare =$conection->prepare("insert into check_t(hora_e,hora_s, fecha_jornada, entrada_salida,num_empleado)
+                                      values (:hora_e,:hora_s,:fecha_actual,:es,:num_empleado) ");
 
         $hora_actual = new DateTime();
+        $string_hora = (string) $hora_actual->format("H:i:s");
+        $string_date = (string) $hora_actual->format("Y-m-d");
+        $prepare->bindValue(':hora_e',$string_hora);
+        $prepare->bindValue(':hora_s',$string_hora);
+        $prepare->bindValue(':fecha_actual',$string_date);
+        $prepare->bindValue(':es',$e_s);
+        $prepare->bindValue(':num_empleado',$user);
 
-        //2.1 Obtener horario del empleado
-        $dia_semana=5;
-        $conection = $this->con->conectar();
-        $prepare = $conection->prepare("select * from horario where num_empleado=".$user." and num_dia=".$dia_semana);
-        $prepare->execute();
-        //
-        $obj_horario = $prepare->fetchObject();
-        $hora_permitida = new DateTime($obj_horario->entrada);
-        /*minutos despues permitidos*/
-        $hora_permitida->modify("+5 minute");
-        /*realizar la operación de resta si esta permitido el chequeo en el intervalo*/
-        $diff = $hora_permitida->diff($hora_actual);
-        /*verifico que la resta de la hora permitida - la hora es negativa, entonces está fuera de la hora permitida*/
-        if($diff->invert == 1){
-
+        $resultado = $prepare->execute();
+        if($resultado){
+            return array("mensaje"=>"Se ha realizado la entrada/salida.","estado"=>true);
         }else{
-
+            return array("mensaje"=>"No fue posible realizar la entrada/salida.","errorinfo"=>$prepare->errorInfo(),"estado"=>false);
+        }
     }
 
+    private function actualizar_to_salida($user)
+    {
+        $fecha = new DateTime();
+        /*Verifico si existe un registro para actualizar*/
+        $conection = $this->con->conectar();
+        $prepare = $conection->prepare("update check_t set hora_s = :hora_s, entrada_salida= :es 
+        where num_empleado=:num_empleado and fecha_jornada=:fecha_jornada");
 
+        $string_salida = (string) $fecha->format("H:i:s") ;
+        $string_fecha = (string) $fecha->format("Y-m-d");
+        $prepare->bindValue(":hora_s",$string_salida);
+        $prepare->bindValue(":es",1);
+        $prepare->bindValue(":num_empleado",$user);
+        $prepare->bindValue(":fecha_jornada",$string_fecha);
 
+        $res = $prepare->execute();
+        if($res){
+            return array("mensaje"=>"Se ha realizado la salida.","estado"=>true);
+        }else{
+            return array("mensaje"=>"No fue posible realizar la salida","errorinfo"=>$prepare->errorInfo(),"estado"=>false);
+        }
     }
 
 
 }
 
 
- $objeto = new user_functions();
- $cc =  $objeto->insertar_entrada("1");
- //var_dump($cc);
+
+ //$objeto = new user_functions();
+ //$cc =  $objeto->insertar_entrada("1");
+//$cc = $objeto->realizar_operacion_entrada_salida("1","12345");
+//var_dump($cc);
+//print $cc;

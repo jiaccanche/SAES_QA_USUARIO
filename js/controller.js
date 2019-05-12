@@ -7,7 +7,25 @@ var verificar_escritura = function () {
     $( "#formulario_empleado" ).submit(function( event ) {
         event.preventDefault();
 
-        var data = obtener_datos_formulario("#formulario_empleado");
+        var data = obtener_datos_formulario("formulario_empleado");
+
+        $.ajax({
+            url:'rutinas.php',
+            type:'POST',
+            data:{
+                rutina:'login',
+                data:JSON.stringify(data)
+            },
+            dataType:'json'
+
+        }).done(function(result) {
+            console.log(result);
+            alert(result.mensaje);
+
+
+        }).fail(function(){
+            alert( "hubo un error con el ajax.");
+        });
 
 
 
