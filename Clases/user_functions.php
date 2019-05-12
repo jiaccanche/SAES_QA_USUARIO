@@ -54,11 +54,11 @@ class user_functions
      //$hora_actual = new DateTime("20:20:10");
 
      //2.1 Obtener horario del empleado
-     $dia_semana=5;
+    // $dia_semana=5;
      /*Fin de semana*/
      if($dia_semana == 7 || $dia_semana == 1){
          //Esta fuera de lo permitido enviar a revisión, enviar mensaje de problema
-         return array("mensaje"=>"No es posible realizar el registro, fuera de dias de trabajo.","estado"=>1);
+         return array("mensaje"=>"No es posible realizar el registro, fuera de días de trabajo.","estado"=>1);
      }
 
      $prepare = $conection->prepare("select * from horario where num_empleado=".$user." and num_dia=".$dia_semana);
@@ -76,7 +76,7 @@ class user_functions
          $res_salida_rango = $this->verificar_rango_horas($hora_permitida,$hora_actual);
          /*No es salida*/
          if(!$res_salida_rango){
-             return array("mensaje"=>"No es posible realizar una entrada o salida ya que no esta fuera del horario permitido.","estado"=>2);
+             return array("mensaje"=>"No es posible realizar una entrada o salida ya que está fuera del horario permitido.","estado"=>2);
          }else{
              $salida=true;
          }

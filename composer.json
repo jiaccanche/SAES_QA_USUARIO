@@ -1,0 +1,13 @@
+{
+    "name": "rosi/saes_qa_usuario",
+    "authors": [
+        {
+            "name": "rosi",
+            "email": "rosigarcilazo@gmail.com"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "8"
+    }
+}

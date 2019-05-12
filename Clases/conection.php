@@ -10,7 +10,7 @@ class conection
 {
 
     private $server = "localhost";
-    private $password = "12345";
+    private $password = "d0ct0r";
     private $user = "postgres";
     private $bdname = "SAES";
     private $conection_bd = null;
@@ -35,7 +35,8 @@ class conection
                 }
             }catch (PDOException $e) {
                 // report error message
-                die($e->getMessage());
+                echo $e->getMessage();
+                //die($e->getMessage());
             }
         }
 
