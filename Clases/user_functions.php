@@ -45,17 +45,18 @@ class user_functions
     /*Verificar según la hora de entrada*/
      $dia_semana = (int) date("w");
      //1.1sumar uno para coincidir con la BD
-     $dia_semana++;
+     //$dia_semana++;
 
      //2.verificar si esta dentro del horario de entrada del usuario la hora
      $hora_actual = new DateTime();
-     //$hora_actual = new DateTime("6:20:10");
-     //$hora_actual = new DateTime("8:31:11");
-     //$hora_actual = new DateTime("20:20:10");
+     //$hora_actual = new DateTime("6:30:10");
+     //$hora_actual = new DateTime("8:20:11");
+     //$hora_actual = new DateTime("19:20:10");
 
      //2.1 Obtener horario del empleado
-    // $dia_semana=5;
+     //   $dia_semana=5;
      /*Fin de semana*/
+     //print $dia_semana;
      if($dia_semana == 7 || $dia_semana == 1){
          //Esta fuera de lo permitido enviar a revisión, enviar mensaje de problema
          return array("mensaje"=>"No es posible realizar el registro, fuera de días de trabajo.","estado"=>1);
@@ -130,14 +131,14 @@ class user_functions
         //verificar estados para la entrada
         switch ($response['estado']){
             case 1: /*Esta en fin de semana*/return $response; break;
-            case 2: /*Esta fuera del rango de horas*/return $response; break;
-            case 3: /*No hay registro de entrada*/
-                return $this->insertar_entrada_salida($user,0);
-                break;
-            case 4: /*Es una salida*/
 
+            case 2: /*Esta fuera del rango de horas*/return $response; break;
+
+            case 3: /*No hay registro de entrada*/return $this->insertar_entrada_salida($user,0);break;
+            case 4: /*Es una salida*/
                 /*Existe el objeto para salida*/
                 if(isset($response['registro'])){
+                    /*Verdadero si ya es una salida*/
                     if(!$response['registro']->entrada_salida){
                         return $this->actualizar_to_salida($user);
                     }else{
@@ -163,17 +164,25 @@ class user_functions
         $hora_actual = new DateTime();
         $string_hora = (string) $hora_actual->format("H:i:s");
         $string_date = (string) $hora_actual->format("Y-m-d");
-        $prepare->bindValue(':hora_e',$string_hora);
-        $prepare->bindValue(':hora_s',$string_hora);
         $prepare->bindValue(':fecha_actual',$string_date);
         $prepare->bindValue(':es',$e_s);
         $prepare->bindValue(':num_empleado',$user);
 
-        $resultado = $prepare->execute();
-        if($resultado){
-            return array("mensaje"=>"Se ha realizado la entrada/salida.","estado"=>true);
+        /*Insertar la entrada o salida en su caso*/
+        if($e_s==0){
+            $prepare->bindValue(':hora_e',$string_hora);
+            $prepare->bindValue(':hora_s',null);
         }else{
-            return array("mensaje"=>"No fue posible realizar la entrada/salida.","errorinfo"=>$prepare->errorInfo(),"estado"=>false);
+            $prepare->bindValue(':hora_e',null);
+            $prepare->bindValue(':hora_s',$string_hora);
+        }
+
+        $resultado = $prepare->execute();
+        $operacion = ($e_s == 0) ? "Entrada":"Salida";
+        if($resultado){
+            return array("mensaje"=>"Se ha realizado la ".$operacion.".","estado"=>true);
+        }else{
+            return array("mensaje"=>"No fue posible realizar la ".$operacion.".","errorinfo"=>$prepare->errorInfo(),"estado"=>false);
         }
     }
 
@@ -205,8 +214,8 @@ class user_functions
 
 
 
- //$objeto = new user_functions();
- //$cc =  $objeto->insertar_entrada("1");
-//$cc = $objeto->realizar_operacion_entrada_salida("1","12345");
-//var_dump($cc);
+ $objeto = new user_functions();
+//$cc =  $objeto->insertar_entrada("1");
+$cc = $objeto->realizar_operacion_entrada_salida("1","12345");
+var_dump($cc);
 //print $cc;
