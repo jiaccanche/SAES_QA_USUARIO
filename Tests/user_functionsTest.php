@@ -1,6 +1,6 @@
 <?php
 /**
-* @autor rosi
+* @autor rosi garcilazo
 */
 require_once('Clases/user_functions.php');
 final class user_functionsTest extends PHPUnit_Framework_TestCase

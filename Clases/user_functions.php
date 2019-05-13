@@ -54,10 +54,10 @@ class user_functions
      //$hora_actual = new DateTime("19:20:10");
 
      //2.1 Obtener horario del empleado
-     //   $dia_semana=5;
+        $dia_semana=5;
      /*Fin de semana*/
      //print $dia_semana;
-     if($dia_semana == 7 || $dia_semana == 1){
+     if($dia_semana == 7 || $dia_semana == 6){
          //Esta fuera de lo permitido enviar a revisión, enviar mensaje de problema
          return array("mensaje"=>"No es posible realizar el registro, fuera de días de trabajo.","estado"=>1);
      }

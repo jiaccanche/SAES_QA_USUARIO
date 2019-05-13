@@ -10,7 +10,7 @@ class conection
 {
 
     private $server = "localhost";
-    private $password = "12345";
+    private $password = "d0ct0r";
     private $user = "postgres";
     private $bdname = "SAES";
     private $conection_bd = null;
