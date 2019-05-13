@@ -50,11 +50,14 @@ class user_functions
      //2.verificar si esta dentro del horario de entrada del usuario la hora
      $hora_actual = new DateTime();
      //$hora_actual = new DateTime("6:30:10");
+     //$hora_actual = new DateTime("6:32:10");
      //$hora_actual = new DateTime("8:20:11");
      //$hora_actual = new DateTime("19:20:10");
 
      //2.1 Obtener horario del empleado
-        $dia_semana=5;
+
+     //$dia_semana=5;
+
      /*Fin de semana*/
      //print $dia_semana;
      if($dia_semana == 7 || $dia_semana == 6){
@@ -69,9 +72,9 @@ class user_functions
      $obj_horario = $prepare->fetchObject();
      $hora_permitida = new DateTime($obj_horario->entrada);
      /*Se verifica que este dentro del rango de hora permitida*/
-     $res_rango = $this->verificar_rango_horas($hora_permitida,$hora_actual);
+     $res_entrada_rango = $this->verificar_rango_horas($hora_permitida,$hora_actual);
      $salida=false;
-     if(!$res_rango){
+     if(!$res_entrada_rango){
          /*Verificar si es una salida*/
          $hora_permitida= new DateTime($obj_horario->salida);
          $res_salida_rango = $this->verificar_rango_horas($hora_permitida,$hora_actual);
@@ -84,6 +87,8 @@ class user_functions
 
      }
 
+     /*Verificación en registro de la tabla de entradas*/
+     /*Refactorizar esto es una función diferente*/
      $query = "select * from check_t where num_empleado=".$user." and fecha_jornada='".$date."'::date";
      //$query = "select * from check_t where num_empleado=".$user." and fecha_jornada='2019-05-12'::date";
      $prepare = $conection->prepare($query);
@@ -91,9 +96,12 @@ class user_functions
      $prepare->execute();
      //obtengo la respuesta como objeto
      $obj =$prepare->fetchObject();
-     $band = is_object($obj);
+     $registro = is_object($obj);
 
-     if($band){
+     if($registro){
+         /*Verifica si la hora introducida sigue en el rango de entrada y ya existe un registro de entrada*/
+         if($res_entrada_rango) return array("mensaje"=>"Ya existe un registro para entrada,para realizar una salida es necesario salir a la hora pertinente.","estado"=>2);
+
          return array("registro"=>$obj,"estado"=>4);
      }else{
          return array("mensaje"=>"No hay registro.","estado"=> $salida==true ? 4:3);
@@ -142,7 +150,7 @@ class user_functions
                     if(!$response['registro']->entrada_salida){
                         return $this->actualizar_to_salida($user);
                     }else{
-                        return array("mensaje"=>"Ya hay un registro de salida, no es posible cambiarlo","estado"=>false);
+                        return array("mensaje"=>"Ya hay un registro de salida, no es posible agregar uno nuevo para este día.","estado"=>false);
                     }
                 }else{
                     return $this->insertar_entrada_salida($user,1);
