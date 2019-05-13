@@ -1,0 +1,23 @@
+#card-login{
+    width: 20rem;
+}
+
+body{
+    background-image: url('https://media.wired.com/photos/5ba3f5bfa8af293117556041/master/pass/SyncronizedClocks-166311698-(1).jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100%;
+}
+
+
+#recuperar_pwd{
+    color: deepskyblue;
+    text-align: center;
+}
+.container{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}

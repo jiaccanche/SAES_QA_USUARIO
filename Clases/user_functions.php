@@ -214,8 +214,8 @@ class user_functions
 
 
 
- $objeto = new user_functions();
+ //$objeto = new user_functions();
 //$cc =  $objeto->insertar_entrada("1");
-$cc = $objeto->realizar_operacion_entrada_salida("1","12345");
-var_dump($cc);
+//$cc = $objeto->realizar_operacion_entrada_salida("1","12345");
+//var_dump($cc);
 //print $cc;
