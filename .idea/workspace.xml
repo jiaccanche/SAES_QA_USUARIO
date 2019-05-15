@@ -2,16 +2,15 @@
 <project version="4">
   <component name="BookmarkManager">
     <bookmark url="file://$PROJECT_DIR$/Clases/user_functions.php" line="195" mnemonic="4" />
-    <bookmark url="file://$PROJECT_DIR$/Clases/nomina.php" line="65" mnemonic="2" />
-    <bookmark url="file://$PROJECT_DIR$/Clases/nomina.php" line="192" mnemonic="1" />
-    <bookmark url="file://$PROJECT_DIR$/Clases/nomina.php" line="116" mnemonic="3" />
+    <bookmark url="file://$PROJECT_DIR$/Clases/nomina.php" line="66" mnemonic="2" />
+    <bookmark url="file://$PROJECT_DIR$/Clases/nomina.php" line="194" mnemonic="1" />
+    <bookmark url="file://$PROJECT_DIR$/Clases/nomina.php" line="118" mnemonic="3" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ead769e2-216d-44c3-8211-b591001d555a" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clases/conection.php" beforeDir="false" afterPath="$PROJECT_DIR$/Clases/conection.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Clases/nomina.php" beforeDir="false" afterPath="$PROJECT_DIR$/Clases/nomina.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clases/user_functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/Clases/user_functions.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Clases/nomina_2019-05-06.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Clases/nomina_2019-05-06.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -27,26 +26,26 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rutinas.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="13" column="92" selection-start-line="13" selection-start-column="92" selection-end-line="13" selection-end-column="92" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Clases/nomina.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="390">
-              <caret line="91" column="74" selection-start-line="91" selection-start-column="74" selection-end-line="91" selection-end-column="74" />
+            <state relative-caret-position="170">
+              <caret line="10" column="17" lean-forward="true" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Clases/nomina.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="145">
+              <caret line="215" column="9" lean-forward="true" selection-start-line="215" selection-start-column="9" selection-end-line="215" selection-end-column="9" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Clases/nomina_2019-05-06.txt">
           <provider selected="true" editor-type-id="text-editor">
             <state>
-              <caret selection-end-column="1748" />
+              <caret selection-end-column="1066" />
             </state>
           </provider>
         </entry>
@@ -54,7 +53,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/PDO/PDO.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="298">
+            <state relative-caret-position="14297">
               <caret line="841" column="7" selection-start-line="841" selection-start-column="4" selection-end-line="841" selection-end-column="7" />
             </state>
           </provider>
@@ -63,7 +62,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Clases/user_functions.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="365">
+            <state relative-caret-position="3774">
               <caret line="222" lean-forward="true" selection-start-line="222" selection-end-line="222" />
             </state>
           </provider>
@@ -193,6 +192,8 @@
       <workItem from="1557729479039" duration="2415000" />
       <workItem from="1557732630558" duration="2936000" />
       <workItem from="1557774537333" duration="28949000" />
+      <workItem from="1557861192538" duration="276000" />
+      <workItem from="1557882131661" duration="1826000" />
     </task>
     <task id="LOCAL-00001" summary="Agregado el trabajo hasta ahora, no realiza aún alguna operación.">
       <created>1557607854559</created>
@@ -233,7 +234,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="86438000" />
+    <option name="totallyTimeSpent" value="88540000" />
   </component>
   <component name="TodoView" selected-index="3">
     <todo-panel id="selected-file">
@@ -246,8 +247,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16414523" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16868381" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -368,17 +370,31 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/rutinas.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="17" lean-forward="true" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Clases/nomina_2019-05-06.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-column="1066" />
+        </state>
+      </provider>
+    </entry>
     <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/PDO/PDO.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="298">
+        <state relative-caret-position="14297">
           <caret line="841" column="7" selection-start-line="841" selection-start-column="4" selection-end-line="841" selection-end-column="7" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rutinas.php">
+    <entry file="file://$PROJECT_DIR$/Clases/user_functions.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" column="92" selection-start-line="13" selection-start-column="92" selection-end-line="13" selection-end-column="92" />
+        <state relative-caret-position="3774">
+          <caret line="222" lean-forward="true" selection-start-line="222" selection-end-line="222" />
         </state>
       </provider>
     </entry>
@@ -389,24 +405,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Clases/user_functions.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="365">
-          <caret line="222" lean-forward="true" selection-start-line="222" selection-end-line="222" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Clases/nomina.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="91" column="74" selection-start-line="91" selection-start-column="74" selection-end-line="91" selection-end-column="74" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Clases/nomina_2019-05-06.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-column="1748" />
+        <state relative-caret-position="145">
+          <caret line="215" column="9" lean-forward="true" selection-start-line="215" selection-start-column="9" selection-end-line="215" selection-end-column="9" />
         </state>
       </provider>
     </entry>

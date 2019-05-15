@@ -52,6 +52,7 @@ class nomina
             $fecha_fin->modify("+".$dias_restantes." day");
 
             $horas_trabajadas =0;
+            $empleado['Horas_penalizadas']= 0;
             for($i = $fecha_ini; $i <= $fecha_fin; $i->modify('+1 day')) {
 
                 $obj_user_check = $this->buscar_user_check($empleado['num_empleado'],$i);
@@ -68,6 +69,7 @@ class nomina
                     //Si hay penalización
                     //print "<br><span style='color: red;'>Penalizacion:".$obj_user_check->num_penalizacion."</span><br>";
                     if ($obj_user_check->num_penalizacion != null)
+                        $empleado['Horas_penalizadas'] += $this->penalizacion;
                         $horas_por_dia =  $horas_por_dia - $this->penalizacion;
 
                     //Sumar horas trabajadas
@@ -212,19 +214,16 @@ class nomina
 
         if(file_exists($nombre_archivo))
         {
-            $mensaje = "El Archivo $nombre_archivo se ha modificado";
-        }
-
-        else
-        {
-            $mensaje = "El Archivo $nombre_archivo se ha creado";
+            if(!unlink($nombre_archivo)){
+                //No fue posible eliminar el archivo
+            }
         }
 
         if($archivo = fopen($nombre_archivo, "a"))
         {
             if(fwrite($archivo, $serializado))
             {
-
+                $mensaje = "Se han guardado los datos";
             }
             else
             {
