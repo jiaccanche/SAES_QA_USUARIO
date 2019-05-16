@@ -11,14 +11,13 @@ class user_functions
 {
     private $con=null;
     private $date;
-
+    private $hora_actual_entrada_test = '14:22:00';
+    private $hora_actual_salida_test = '18:50:22';
+    private $fecha_actual_test = '2019-05-13';
  public function __construct()
  {
      $this->con = new conection();
      date_default_timezone_set("America/merida");
-     $date = date("Y-m-d");
-
-
  }
 
     /**
@@ -59,9 +58,8 @@ class user_functions
 
      //2.verificar si esta dentro del horario de entrada del usuario la hora
      $hora_actual = new DateTime();
-     //$hora_actual = new DateTime("6:30:10");
-     //$hora_actual = new DateTime("6:32:10");
-     //$hora_actual = new DateTime("8:20:11");
+     //$hora_actual = new DateTime($this->hora_actual_entrada_test);
+     //$hora_actual = new DateTime($this->hora_actual_salida_test);
      //$hora_actual = new DateTime("19:20:10");
 
      //2.1 Obtener horario del empleado
@@ -80,6 +78,7 @@ class user_functions
 
      //Se obtiene la entrada y salida para ese día
      $obj_horario = $prepare->fetchObject();
+     //var_dump($obj_horario);
      $hora_permitida = new DateTime($obj_horario->entrada);
      /*Se verifica que este dentro del rango de hora permitida*/
      $res_entrada_rango = $this->verificar_rango_horas($hora_permitida,$hora_actual);
@@ -207,9 +206,11 @@ class user_functions
         }
     }
 
-    private function actualizar_to_salida($user)
+    public function actualizar_to_salida($user)
     {
         $fecha = new DateTime();
+
+        //$fecha = new DateTime($this->hora_actual_salida_test." ".$this->fecha_actual_test);
         /*Verifico si existe un registro para actualizar*/
         $conection = $this->con->conectar();
         $prepare = $conection->prepare("update check_t set hora_s = :hora_s, entrada_salida= :es 
@@ -235,8 +236,9 @@ class user_functions
 
 
 
- //$objeto = new user_functions();
+// $objeto = new user_functions();
 //$cc =  $objeto->insertar_entrada("1");
-//$cc = $objeto->realizar_operacion_entrada_salida("1","12345");
+//$cc = $objeto->realizar_operacion_entrada_salida("2","12345");
+//$cc = $objeto->actualizar_to_salida("2");
 //var_dump($cc);
 //print $cc;
