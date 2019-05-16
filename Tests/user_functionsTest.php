@@ -13,6 +13,14 @@ final class user_functionsTest extends PHPUnit_Framework_TestCase
 		$uf = new user_functions();
 		$this->assertFalse($uf->verificar_empleado('1000', '98787'));
 	}
+	public function testVerificarDiaInhabilValidoRegresaUnObjeto(){
+		$uf = new user_functions();
+		$this->assertNotNull($uf->verificar_diaInhabil());
+	}
+	public function testDiaInhabilIncorrectoRegresaFalse(){
+		$uf = new user_functions();
+		$this->assertFalse($uf->verificar_diaInhabil());
+	}
 	public function testRangoDeHorasRetornaTrueConHorasCorrectas(){
 		$hora = new DateTime();
 		$hora_actual = new DateTime();
