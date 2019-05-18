@@ -96,7 +96,8 @@ class nomina
 
         //var_dump($lista_nomina_empleados);
         /********************************/
-          return $this->guardar_nomina_serializada($lista_nomina_empleados,$fecha_base);
+          $objeto_serializar = array("registros_nomina"=>$lista_nomina_empleados,"fecha_fin"=>$fecha_fin->format("Y-m-d"));
+          return $this->guardar_nomina_serializada($objeto_serializar,$fecha_base);
         }
 
         public function obtener_pago_periodo_dia_inhabil($empleado,$fecha){
@@ -213,6 +214,7 @@ class nomina
 
     private function guardar_nomina_serializada($lista_empleados_sin_incidentes,$fecha)
     {
+
         $serializado = json_encode($lista_empleados_sin_incidentes);
 
         $nombre_archivo = "../nominas_excel/nomina_".$fecha.".txt";
@@ -270,7 +272,8 @@ class nomina
 
 
         /*Decode la lista serializada*/
-        $lista=  json_decode($result);
+        $objeto_nomina=  json_decode($result);
+        $lista = $objeto_nomina->registros_nomina;
         /*Creo archivo excel*/
         $Excel_archivo =  new Spreadsheet();
         $sheet = $Excel_archivo->getActiveSheet();
@@ -283,7 +286,8 @@ class nomina
         $sheet->setCellValue('D2','Horas penalizadas')->getStyle('D2')->getFont()->setBold(true);
         $sheet->setCellValue('E2','Horas totales')->getStyle('E2')->getFont()->setBold(true);
         $sheet->setCellValue('F2','Salario total')->getStyle('F2')->getFont()->setBold(true);
-
+        $sheet->setCellValue('G2','Fecha inicio')->getStyle('F2')->getFont()->setBold(true);
+        $sheet->setCellValue('H2','Fecha final')->getStyle('F2')->getFont()->setBold(true);
         $numero_fila_libre = 3;
         /*Recorro lista de empleados*/
 
@@ -296,7 +300,8 @@ class nomina
                 $sheet->setCellValue('D'.$celda_escribir,$value->Horas_penalizadas);
                 $sheet->setCellValue('E'.$celda_escribir,$value->Horas_totales);
                 $sheet->setCellValue('F'.$celda_escribir,$value->salario_total);
-
+                $sheet->setCellValue('G'.$celda_escribir,$fecha_lunes);
+                $sheet->setCellValue('H'.$celda_escribir,$objeto_nomina->fecha_fin);
             }
 
         }
@@ -304,9 +309,13 @@ class nomina
         /*Guardo el archivo*/
         $writer_Excel = new Xlsx($Excel_archivo);
         try{
-            $path_excel= '../nominas_excel/nomina_'.$fecha_lunes.'.xlsx';
-            $res = $writer_Excel->save($path_excel);
-            return array("mensaje"=>"Se ha creado exitosamente el arhivo excel","path_excel"=>$path_excel,"estado"=>true);
+           // $path_excel= '../nominas_excel/nomina_'.$fecha_lunes.'.xlsx';
+            $name_file = 'nomina_'.$fecha_lunes.'_'.$objeto_nomina->fecha_fin;
+            //$res = $writer_Excel->save($path_excel);
+            //return array("mensaje"=>"Se ha creado exitosamente el arhivo excel","path_excel"=>$path_excel,"estado"=>true);
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment; filename="'.$name_file.'.xlsx"');
+            $writer_Excel->save("php://output");
 
         }catch (\PhpOffice\PhpSpreadsheet\Exception $e){
             return array("mensaje"=>$e->getMessage(),"estado"=>false);
