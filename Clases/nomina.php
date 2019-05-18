@@ -6,6 +6,11 @@
  * Time: 10:26 PM
  */
 
+require '../vendor/autoload.php';
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 include_once ("conection.php");
 include_once ("user_functions.php");
 class nomina
@@ -210,7 +215,7 @@ class nomina
     {
         $serializado = json_encode($lista_empleados_sin_incidentes);
 
-        $nombre_archivo = "nomina_".$fecha.".txt";
+        $nombre_archivo = "../nominas_excel/nomina_".$fecha.".txt";
 
         if(file_exists($nombre_archivo))
         {
@@ -237,18 +242,91 @@ class nomina
 
     }
 
+    public function read_archivo_txt ($path_file){
+        $fn = fopen($path_file,"r");
+        $result = fgets($fn);
+        fclose($fn);
+        return (string)$result;
+
+    }
+
+
+    public function generar_reporte_excel_fecha($fecha_lunes,$path_file=''){
+        $dia_lunes = date('w',strtotime($fecha_lunes));
+        /*Verificar si era lunes*/
+        if($dia_lunes != 1) return array("mensaje"=>"No es un lunes, no es posible generar el reporte","estado"=>false);
+
+        /*Buscar dentro del directorio*/
+        if($path_file=='') $path_file="../nominas_excel/nomina_".$fecha_lunes.".txt";
+
+        /*Leemos el archivo txt*/
+        if(is_file($path_file)){
+            $result=$this->read_archivo_txt($path_file);
+        }else{
+            $respuesta = $this->calcular_nomina($fecha_lunes);
+            if($respuesta['path']==null) return $respuesta;
+            $result=$this->read_archivo_txt($respuesta['path']);
+        }
+
+
+        /*Decode la lista serializada*/
+        $lista=  json_decode($result);
+        /*Creo archivo excel*/
+        $Excel_archivo =  new Spreadsheet();
+        $sheet = $Excel_archivo->getActiveSheet();
+
+        /*Agregar titulos*/
+        $sheet->setCellValue('A1','Nomina')->getStyle('A1')->getFont()->setBold(true);
+        $sheet->setCellValue('A2','Nombre')->getStyle('A2')->getFont()->setBold(true);
+        $sheet->setCellValue('B2','Puesto')->getStyle('B2')->getFont()->setBold(true);
+        $sheet->setCellValue('C2','Salario por hora')->getStyle('C2')->getFont()->setBold(true);
+        $sheet->setCellValue('D2','Horas penalizadas')->getStyle('D2')->getFont()->setBold(true);
+        $sheet->setCellValue('E2','Horas totales')->getStyle('E2')->getFont()->setBold(true);
+        $sheet->setCellValue('F2','Salario total')->getStyle('F2')->getFont()->setBold(true);
+
+        $numero_fila_libre = 3;
+        /*Recorro lista de empleados*/
+
+        if (is_array($lista)){
+            foreach ($lista as $key=>$value){
+                $celda_escribir = $key + $numero_fila_libre;
+                $sheet->setCellValue('A'.$celda_escribir,$value->nombre);
+                $sheet->setCellValue('B'.$celda_escribir,$value->descripcion);
+                $sheet->setCellValue('C'.$celda_escribir,$value->salario_pe);
+                $sheet->setCellValue('D'.$celda_escribir,$value->Horas_penalizadas);
+                $sheet->setCellValue('E'.$celda_escribir,$value->Horas_totales);
+                $sheet->setCellValue('F'.$celda_escribir,$value->salario_total);
+
+            }
+
+        }
+
+        /*Guardo el archivo*/
+        $writer_Excel = new Xlsx($Excel_archivo);
+        try{
+            $path_excel= '../nominas_excel/nomina_'.$fecha_lunes.'.xlsx';
+            $res = $writer_Excel->save($path_excel);
+            return array("mensaje"=>"Se ha creado exitosamente el arhivo excel","path_excel"=>$path_excel,"estado"=>true);
+
+        }catch (\PhpOffice\PhpSpreadsheet\Exception $e){
+            return array("mensaje"=>$e->getMessage(),"estado"=>false);
+        }
+
+
+    }
+
 }
 
 
     $obj = new nomina();
-    $response = $obj->calcular_nomina("2019-05-06");
+    //$response = $obj->calcular_nomina("2019-05-06");
+    $response = $obj->generar_reporte_excel_fecha("2019-05-06");
+    var_dump($response);
+
+
     /**/
-   // $response = $obj->buscar_empleados_sin_penalizar();
+    // $response = $obj->buscar_empleados_sin_penalizar();
     //$response = $obj->buscar_user_check('3', new DateTime("2019-05-06"));
     //$response = $obj->restar_horas("00:00:00","00:00:00");
     //$response = $obj->obtener_pago_periodo_dia_inhabil('5', new DateTime("2019-05-06"));
-        //$response = $obj->dia_inhabi1(new DateTime("2019-05-06"));
-
-var_dump($response);
-    //$fecha = date('w', strtotime('2019-05-10'));
-    //print $fecha;
+    //$response = $obj->dia_inhabi1(new DateTime("2019-05-06"));
