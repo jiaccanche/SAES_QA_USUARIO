@@ -327,9 +327,9 @@ class nomina
 }
 
 
-    $obj = new nomina();
+    //$obj = new nomina();
     //$response = $obj->calcular_nomina("2019-05-06");
-    $response = $obj->generar_reporte_excel_fecha("2019-05-06");
+    //$response = $obj->generar_reporte_excel_fecha("2019-05-06");
 
     /**/
     // $response = $obj->buscar_empleados_sin_penalizar();

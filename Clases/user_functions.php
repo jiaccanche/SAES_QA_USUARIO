@@ -10,10 +10,7 @@ include_once("conection.php");
 class user_functions
 {
     private $con=null;
-    private $date;
-    private $hora_actual_entrada_test = '14:22:00';
-    private $hora_actual_salida_test = '18:50:22';
-    private $fecha_actual_test = '2019-05-13';
+
  public function __construct()
  {
      $this->con = new conection();
@@ -131,11 +128,6 @@ class user_functions
  function hora_dentro_rango_horas($dateEntrada_menos, $dateEntrada_mas, $dateEntrada) {
         return $dateEntrada_menos <= $dateEntrada && $dateEntrada <= $dateEntrada_mas;
  }
-
-
-
-
-
 
  public function realizar_operacion_entrada_salida($user,$pwd){
     $verificacion = $this->verificar_empleado($user,$pwd);

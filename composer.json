@@ -6,7 +6,9 @@
             "email": "rosigarcilazo@gmail.com"
         }
     ],
-    "require": {},
+    "require": {
+        "phpoffice/phpspreadsheet": "^1.6"
+    },
     "require-dev": {
         "phpunit/phpunit": "8"
     }
