@@ -64,7 +64,7 @@ class user_functions
 
      //2.1 Obtener horario del empleado
 
-     $dia_semana=5;
+     //$dia_semana=5;
 
      /*Fin de semana*/
      //print $dia_semana;
@@ -140,7 +140,7 @@ class user_functions
  public function realizar_operacion_entrada_salida($user,$pwd){
     $verificacion = $this->verificar_empleado($user,$pwd);
 
-    if ($this->verificar_diaInhabil() == false) {
+    if ($this->verificar_diaInhabil() !== false) {
         return array("mensaje"=>"No se puede registrar entradas ni salidas en día inhábil","estado"=>false);
     }
     if($verificacion == false){
