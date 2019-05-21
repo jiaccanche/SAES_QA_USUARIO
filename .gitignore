@@ -1,2 +1,6 @@
 # Ignore folder named `vendor`
 vendor/
+php/conection.php
+/.idea
+idea
+.idea/*

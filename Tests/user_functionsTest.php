@@ -7,20 +7,13 @@ final class user_functionsTest extends PHPUnit_Framework_TestCase
 {
 	public function testVerificarUsuarioValidoRegresaUnObjeto(){
 		$uf = new user_functions();
-		$this->assertNotNull($uf->verificar_empleado('1', '12345'));
+		$this->assertTrue($uf->verificar_empleado('1', '12345'));
 	}
 	public function testUsuarioIncorrectoRegresaFalse(){
 		$uf = new user_functions();
 		$this->assertFalse($uf->verificar_empleado('1000', '98787'));
 	}
-	public function testVerificarDiaInhabilValidoRegresaUnObjeto(){
-		$uf = new user_functions();
-		$this->assertNotNull($uf->verificar_diaInhabil());
-	}
-	public function testDiaInhabilIncorrectoRegresaFalse(){
-		$uf = new user_functions();
-		$this->assertFalse($uf->verificar_diaInhabil());
-	}
+
 	public function testRangoDeHorasRetornaTrueConHorasCorrectas(){
 		$hora = new DateTime();
 		$hora_actual = new DateTime();
