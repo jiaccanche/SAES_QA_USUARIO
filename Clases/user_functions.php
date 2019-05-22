@@ -135,6 +135,7 @@ class user_functions
     if ($this->verificar_diaInhabil() !== false) {
         return array("mensaje"=>"No se puede registrar entradas ni salidas en día inhábil","estado"=>false);
     }
+    
     if($verificacion == false){
         return array("mensaje"=>"La contraseña o el usuario son incorrectos","estado"=>false);
     }else{
