@@ -37,6 +37,15 @@ class user_functions
 
  }
 
+ public function verificar_periodo($empleado){
+    $conection = $this->con->conectar();
+    $date = date('Y-m-d');
+    $query = $conection->prepare("SELECT * FROM periodo WHERE num_empleado = '$empleado' AND fecha_ini <= '$date' AND fecha_fin >= '$date'");
+    $query->execute();
+
+    return $query->fetchObject();
+ }
+
  public function verificar_diaInhabil(){
     $conection = $this->con->conectar();
     $date = date('Y-m-d');
@@ -140,6 +149,9 @@ class user_functions
  public function realizar_operacion_entrada_salida($user,$pwd){
     $verificacion = $this->verificar_empleado($user,$pwd);
 
+    if ($this->verificar_periodo($user) !== false) {
+        return array("mensaje"=>"No se puede registrar entradas ni salidas en un periodo de ausencia","estado"=>false);
+    }
     if ($this->verificar_diaInhabil() !== false) {
         return array("mensaje"=>"No se puede registrar entradas ni salidas en día inhábil","estado"=>false);
     }
