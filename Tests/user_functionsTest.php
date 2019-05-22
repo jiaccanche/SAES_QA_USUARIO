@@ -5,10 +5,7 @@
 require_once('Clases/user_functions.php');
 final class user_functionsTest extends PHPUnit_Framework_TestCase
 {
-	public function testVerificarUsuarioValidoRegresaUnObjeto(){
-		$uf = new user_functions();
-		$this->assertTrue($uf->verificar_empleado('1', '12345'));
-	}
+	
 	public function testUsuarioIncorrectoRegresaFalse(){
 		$uf = new user_functions();
 		$this->assertFalse($uf->verificar_empleado('1000', '98787'));
